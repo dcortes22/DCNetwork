@@ -9,10 +9,6 @@ import Foundation
 @testable import DCNetwork
 
 struct MockDataRequest: DataRequest {
-    struct MockResponse: Decodable {
-        let key: String
-    }
-    
     typealias Response = MockResponse
 
     // Valores de prueba para el request
