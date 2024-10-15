@@ -2,6 +2,50 @@
 
 `DCNetwork` is a library designed to handle HTTP network requests in a clean, structured, and efficient manner. It provides a set of utilities, including the core class `DCNetworkManager`, which simplifies the process of making network requests, serializing parameters, and decoding responses.
 
+## Installation
+
+### Swift Package Manager
+
+You can integrate `DCNetwork` into your project using [Swift Package Manager (SPM)](https://swift.org/package-manager/).
+
+#### Step 1: Open Xcode
+
+1. In Xcode, select **File > Add Packages**.
+2. Enter the URL of this repository in the search bar: `https://github.com/dcortes22/DCNetwork`
+3. Select the appropriate version or branch (typically `main` or a version like `1.0.0`).
+4. Click **Add Package**.
+
+#### Step 2: Add Dependency to `Package.swift`
+
+If you are using Swift Package Manager in your own project via the `Package.swift` file, you can add `DCNetwork` as a dependency by including it in the `dependencies` section:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/dcortes22/DCNetwork", from: "1.0.0")
+]
+```
+
+Then, include DCNetwork as a dependency for your target:
+
+```swift
+.target(
+    name: "YourTargetName",
+    dependencies: [
+        .product(name: "DCNetwork", package: "DCNetwork")
+    ]
+)
+```
+
+#### Step 3: Import DCNetwork
+
+After the package has been added, you can import DCNetwork wherever you need it:
+
+```swift
+import DCNetwork
+```
+
+Now you’re ready to start using DCNetwork in your project!
+
 ## DCNetworkManager
 
 `DCNetworkManager` is the main class that handles network requests within the `DCNetwork` library. It provides an asynchronous method for executing network requests, managing various HTTP methods, handling serialization, and decoding responses.
