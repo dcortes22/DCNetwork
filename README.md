@@ -1,5 +1,8 @@
 # DCNetwork
 
+![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/dcortes22?style=flat)
+![GitHub Release](https://img.shields.io/github/v/release/dcortes22/DCNetwork?style=flat)
+
 `DCNetwork` is a library designed to handle HTTP network requests in a clean, structured, and efficient manner. It provides a set of utilities, including the core class `DCNetworkManager`, which simplifies the process of making network requests, serializing parameters, and decoding responses.
 
 ## Installation
