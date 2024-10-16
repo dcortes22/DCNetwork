@@ -148,4 +148,24 @@ final class DCNetworkTests: XCTestCase {
         
         XCTAssertEqual(response.key, "value")
     }
+    
+    func testPerformWithEmptyResponse() async throws {
+        
+        let mockSession = MockNetworkSession()
+        mockSession.data = Data()
+        mockSession.urlResponse = HTTPURLResponse(
+            url: URL(string: "https://api.example.com/submit")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        let request = EmptyDataRequest()
+        
+        let response = try await DCNetworkManager.perform(request: request, session: mockSession)
+        
+        XCTAssertNotNil(mockSession.lastURLRequest)
+        XCTAssertEqual(mockSession.lastURLRequest?.httpMethod, "POST")
+        XCTAssertNil(response)
+    }
 }

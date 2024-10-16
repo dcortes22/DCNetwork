@@ -22,6 +22,13 @@ final class ResponseDecoder {
     ///     - The decoded response of type `T.Response`, which conforms to `Decodable`.
     static func decode<T>(request: T, from data: Data) throws -> T.Response where T: DataRequest {
         do {
+            if data.isEmpty {
+                if let type = T.Response.self as? ExpressibleByNilLiteral.Type {
+                    return type.init(nilLiteral: ()) as! T.Response
+                } else {
+                    throw NetworkError.emptyResponse
+                }
+            }
             return try JSONDecoder().decode(T.Response.self, from: data)
         } catch let error as DecodingError {
             let errorMessage = Self.decodeErrorMessage(for: error)
