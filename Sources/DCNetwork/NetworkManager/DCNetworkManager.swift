@@ -22,7 +22,7 @@ public final class DCNetworkManager {
     ///   - `NetworkError.decodeError`: If there is an error during decoding of the response data.
     /// - Returns: The decoded response of type `T.Response` where `T` conforms to `DataRequest`.
     public static func perform<T>(request: T, session: NetworkSession = URLSession.shared) async throws -> T.Response where T: DataRequest {
-        guard var urlComponent = URLComponents(string: "\(request.sheme)://\(request.baseUrl)/\(request.path)") else {
+        guard var urlComponent = URLComponents(string: "\(request.scheme)://\(request.baseUrl)/\(request.path)") else {
             throw NetworkError.invalidURL
         }
         

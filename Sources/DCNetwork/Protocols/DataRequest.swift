@@ -23,7 +23,7 @@ public protocol DataRequest {
 }
 
 public extension DataRequest {
-    var sheme: String { "https" }
+    var scheme: String { "https" }
     
     var method: HttpMethod { .get }
     
