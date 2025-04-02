@@ -21,7 +21,7 @@ public final class DCNetworkManager {
     ///   - `NetworkError.statusCodeError`: If the response status code is outside the 200-299 range.
     ///   - `NetworkError.decodeError`: If there is an error during decoding of the response data.
     /// - Returns: The decoded response of type `T.Response` where `T` conforms to `DataRequest`.
-    public static func perform<T>(request: T, session: NetworkSession = URLSession.shared) async throws -> T.Response where T: DataRequest {
+    public static func perform<T, R>(request: T, session: NetworkSession = URLSession.shared) async throws -> R where T: DataRequest, R: Codable {
         guard var urlComponent = URLComponents(string: "\(request.scheme)://\(request.baseUrl)/\(request.path)") else {
             throw NetworkError.invalidURL
         }

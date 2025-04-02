@@ -8,8 +8,6 @@
 import Foundation
 
 public protocol DataRequest {
-    associatedtype Response: Decodable
-    
     var scheme: String { get }
     var baseUrl: String { get }
     var path: String { get }
@@ -19,7 +17,7 @@ public protocol DataRequest {
     var contentType: ContentType { get }
     var files: [FileData] { get }
     
-    func decode(_ data: Data) throws -> Response
+    func decoder() -> JSONDecoder
 }
 
 public extension DataRequest {
@@ -35,8 +33,7 @@ public extension DataRequest {
     
     var files: [FileData] { [] }
     
-    func decode(_ data: Data) throws -> Response {
-        let decoder = JSONDecoder()
-        return try decoder.decode(Response.self, from: data)
+    func decoder() -> JSONDecoder {
+        JSONDecoder()
     }
 }

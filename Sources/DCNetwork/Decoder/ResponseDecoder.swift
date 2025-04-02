@@ -10,27 +10,35 @@ import Foundation
 final class ResponseDecoder {
     
     /// Decodes the given data into the expected response type for the provided request.
-    /// This function attempts to decode the provided `Data` into the expected response type `T.Response` as defined by the `DataRequest`. If the decoding fails, it catches the `DecodingError`, generates an appropriate error message, and throws a `NetworkError.decodeError` with the error details.
+    ///
+    /// This function attempts to decode the provided `Data` into the expected response type `R`,
+    /// which must conform to `Codable`. If the data is empty, it checks whether `R` conforms to
+    /// `ExpressibleByNilLiteral` to allow returning `nil`-equivalent values. If decoding fails,
+    /// it catches `DecodingError`, generates a readable error message, and throws a
+    /// `NetworkError.decodeError`.
+    ///
     /// - Parameters:
-    ///     - request: A `DataRequest` object that defines the expected response type (`T.Response`) and provides context for the decoding.
-    ///     - data: The raw `Data` to be decoded into the response type.
+    ///   - request: A `DataRequest` object that defines the expected response type (`R`)
+    ///              and provides decoding context.
+    ///   - data: The raw `Data` to decode.
+    ///
     /// - Throws:
-    ///     - `NetworkError.decodeError`: If the decoding process fails, it throws a `decodeError` containing the detailed error message.
-    ///     - `DecodingError`: If an issue occurs during decoding that matches the `DecodingError` cases, such as a type mismatch, missing keys, etc.
-    ///     - Other errors: Any other errors that might occur during the decoding process will also be thrown as a `NetworkError.decodeError`.
-    /// - Returns:
-    ///     - The decoded response of type `T.Response`, which conforms to `Decodable`.
-    static func decode<T>(request: T, from data: Data) throws -> T.Response where T: DataRequest {
+    ///   - `NetworkError.emptyResponse`: When `data` is empty and the response type does not allow `nil`.
+    ///   - `NetworkError.decodeError`: When the decoding process fails, with an associated message.
+    ///
+    /// - Returns: The decoded response of type `R`.
+    static func decode<T, R>(request: T, from data: Data) throws -> R where T: DataRequest, R: Codable {
         guard !data.isEmpty else {
-            if let responseType = T.Response.self as? ExpressibleByNilLiteral.Type {
-                return responseType.init(nilLiteral: ()) as! T.Response
+            if let responseType = R.self as? ExpressibleByNilLiteral.Type {
+                return responseType.init(nilLiteral: ()) as! R
             } else {
                 throw NetworkError.emptyResponse
             }
         }
 
         do {
-            return try JSONDecoder().decode(T.Response.self, from: data)
+            let decoder = request.decoder()
+            return try decoder.decode(R.self, from: data)
         } catch let decodingError as DecodingError {
             let errorMessage = Self.decodeErrorMessage(for: decodingError)
             throw NetworkError.decodeError(errorMessage)
