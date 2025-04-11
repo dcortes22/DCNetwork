@@ -52,6 +52,14 @@ public final class DCNetworkManager {
         }
         
         guard (200...299).contains(httpResponse.statusCode) else {
+            if let errorMessage = try? JSONDecoder().decode([String].self, from: data) {
+                throw NetworkError.apiError(errorMessage.joined(separator: ","), httpResponse.statusCode)
+            }
+            
+            if let fallBackMessage = String(data: data, encoding: .utf8) {
+                throw NetworkError.apiError(fallBackMessage, httpResponse.statusCode)
+            }
+            
             throw NetworkError.statusCodeError(httpResponse.statusCode)
         }
         

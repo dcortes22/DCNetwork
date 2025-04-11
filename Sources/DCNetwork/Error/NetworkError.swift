@@ -16,6 +16,7 @@ public enum NetworkError: Error, Equatable {
     case decodeError(String)
     case emptyResponse
     case unknownError
+    case apiError(String, Int)
     
     public static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
         switch (lhs, rhs) {
@@ -34,6 +35,8 @@ public enum NetworkError: Error, Equatable {
         case (.unknownError, .unknownError):
             return true
         case (.emptyResponse, .emptyResponse):
+            return true
+        case (.apiError, .apiError):
             return true
         default:
             return false
