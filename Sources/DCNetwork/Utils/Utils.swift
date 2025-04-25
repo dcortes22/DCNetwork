@@ -18,8 +18,22 @@ struct Utils {
             return String(doubleValue)
         case let stringValue as String:
             return stringValue
+        case let boolValue as Bool:
+            return String(boolValue)
+        case let dict as [String: Any]:
+            return jsonString(from: dict)
+        case let array as [Any]:
+            return jsonString(from: array)
         default:
             return nil
         }
+    }
+    
+    private static func jsonString(from object: Any) -> String? {
+        guard JSONSerialization.isValidJSONObject(object),
+              let data = try? JSONSerialization.data(withJSONObject: object, options: []) else {
+            return nil
+        }
+        return String(data: data, encoding: .utf8)
     }
 }
